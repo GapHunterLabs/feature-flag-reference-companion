@@ -1,0 +1,61 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>dev.gaphunter.featureflagreferencecompanion</id>
+    <name>Feature Flag Reference Companion</name>
+    <vendor>Gap Hunter Labs</vendor>
+    <description><![CDATA[
+        <p>Gutter icon next to every feature-flag-check call's key literal
+        in Java/Kotlin code (<code>isEnabled("checkout_v2")</code>,
+        <code>variation("checkout_v2", false)</code>, and other common
+        LaunchDarkly/Unleash/ConfigCat/home-grown method names), showing
+        how many times that exact key is referenced anywhere else in the
+        open project -- helps find orphaned flags (dead code left behind
+        after a rollout completed) without connecting to any provider.</p>
+        <p><b>100% static PSI analysis, manually refreshed:</b> the
+        project-wide reference count is real work, so it's computed only
+        when you explicitly run <b>Refresh Feature Flag References</b>
+        (Find Action or Tools menu) -- never recalculated on every
+        keystroke. Until the first refresh, call sites show a neutral
+        "not yet scanned" icon instead of guessing.</p>
+        <p>Matching is by simple method name only, not a resolved SDK
+        symbol -- works the same whether LaunchDarkly, Unleash, ConfigCat,
+        or an in-house <code>FeatureFlags</code> helper is actually on the
+        classpath. Stated honestly, not exhaustively: a differently-named
+        wrapper around one of these SDKs isn't detected -- that's a real,
+        documented limitation, not a bug.</p>
+        <p>Java and Kotlin in v0.1. 100% static analysis of files already
+        open in your project -- no network call, no provider connection,
+        no telemetry.</p>
+        <p>Free. No license nags, no telemetry, no popups.</p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.kotlin</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <codeInsight.lineMarkerProvider language="JAVA"
+            implementationClass="dev.gaphunter.featureflagreferencecompanion.gutter.FlagReferenceLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="kotlin"
+            implementationClass="dev.gaphunter.featureflagreferencecompanion.gutter.FlagReferenceLineMarkerProvider"/>
+    </extensions>
+
+    <!-- Required since the Kotlin plugin's K2 mode became the default: without this,
+         the whole plugin silently fails to load (SDK_GOTCHAS.md SS3). JavaFlagCheckFinder/
+         KotlinFlagCheckFinder and FlagReferenceLineMarkerProvider only walk structural PSI
+         (PsiMethodCallExpression, KtCallExpression, KtStringTemplateExpression); none of
+         them call any Kotlin resolve/analysis API, so both K1 and K2 are genuinely supported. -->
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK1="true" supportsK2="true"/>
+    </extensions>
+
+    <actions>
+        <action id="FeatureFlagReferenceCompanion.Refresh"
+            class="dev.gaphunter.featureflagreferencecompanion.action.RefreshFlagReferencesAction"
+            text="Refresh Feature Flag References"
+            description="Re-scan the whole open project for feature-flag-check call sites and update gutter icon reference counts"
+            icon="AllIcons.Actions.Refresh">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
