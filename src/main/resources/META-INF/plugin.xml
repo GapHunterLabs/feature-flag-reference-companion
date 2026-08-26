@@ -38,6 +38,7 @@
             implementationClass="dev.gaphunter.featureflagreferencecompanion.gutter.FlagReferenceLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="kotlin"
             implementationClass="dev.gaphunter.featureflagreferencecompanion.gutter.FlagReferenceLineMarkerProvider"/>
+        <notificationGroup id="Feature Flag Reference Companion" displayType="BALLOON"/>
     </extensions>
 
     <!-- Required since the Kotlin plugin's K2 mode became the default: without this,

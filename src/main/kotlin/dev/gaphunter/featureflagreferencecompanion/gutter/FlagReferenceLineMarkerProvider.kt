@@ -13,6 +13,7 @@ import dev.gaphunter.featureflagreferencecompanion.index.FlagReferenceIndex
 import dev.gaphunter.featureflagreferencecompanion.model.FlagCheckCall
 import dev.gaphunter.featureflagreferencecompanion.model.FlagReferenceResult
 import dev.gaphunter.featureflagreferencecompanion.model.FlagReferenceVerdict
+import dev.gaphunter.featureflagreferencecompanion.review.ReviewPrompt
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
@@ -61,6 +62,16 @@ class FlagReferenceLineMarkerProvider : LineMarkerProviderDescriptor(), DumbAwar
             val leaf = leafAnchorOf(element) ?: continue
             val verdictResult = if (index.hasRunAtLeastOnce()) index.resultFor(call) else null
             result.add(buildMarker(leaf, element.textRange, call, verdictResult))
+
+            // Only an orphan-candidate verdict is a real, actionable
+            // finding -- IN_USE/NOT_YET_SCANNED just show informational
+            // status for every flag check site, which would inflate the
+            // CTA counter on ordinary, healthy code.
+            if (verdictResult?.verdict == FlagReferenceVerdict.ORPHAN_CANDIDATE) {
+                val path = file.virtualFile?.path ?: continue
+                val lineNumber = file.viewProvider.document?.getLineNumber(leaf.textRange.startOffset) ?: -1
+                ReviewPrompt.recordHit(project, "$path:$lineNumber:${call.key}")
+            }
         }
     }
 
