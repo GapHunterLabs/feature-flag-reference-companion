@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * at least once, every call site shows [FlagReferenceIcons.NOT_YET_SCANNED]
  * instead of guessing at a verdict.
  *
- * **Leaf-anchored from the start** (`SDK_GOTCHAS.md` §20): the element
+ * **Leaf-anchored from the start**: the element
  * the daemon actually visits is a string-literal leaf/composite
  * depending on language (`PsiLiteralExpression` in Java is already a
  * leaf-ish token; `KtStringTemplateExpression` in Kotlin is a composite
@@ -93,7 +93,7 @@ class FlagReferenceLineMarkerProvider : LineMarkerProviderDescriptor(), DumbAwar
         }
     }
 
-    /** The real leaf PSI token to anchor the [LineMarkerInfo] on -- see class doc / `SDK_GOTCHAS.md` §20. */
+    /** The real leaf PSI token to anchor the [LineMarkerInfo] on -- see class doc above. */
     private fun leafAnchorOf(element: PsiElement): PsiElement? {
         var leaf = element
         while (leaf.firstChild != null) {
