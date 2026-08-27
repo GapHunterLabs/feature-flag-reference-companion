@@ -16,7 +16,7 @@ import dev.gaphunter.featureflagreferencecompanion.index.FlagReferenceIndex
  * Markers are matched by [LineMarkerInfo.getLineMarkerTooltip] (which
  * always contains the full flag key, per [FlagReferenceLineMarkerProvider.tooltipFor])
  * rather than by the marker's anchor `element.text` -- the anchor is
- * deliberately a **leaf** PSI token (`SDK_GOTCHAS.md` SS20), which for a
+ * deliberately a **leaf** PSI token, which for a
  * Kotlin `KtStringTemplateExpression` is just the innermost quote/content
  * token, not the whole literal's text the way a Java `PsiLiteralExpression`
  * leaf happens to be.

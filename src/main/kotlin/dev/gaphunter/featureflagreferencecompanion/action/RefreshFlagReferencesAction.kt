@@ -20,8 +20,8 @@ import dev.gaphunter.featureflagreferencecompanion.index.FlagReferenceIndex
  * by `circular-dependency-companion`.
  *
  * Runs the scan in a background [Task.Backgroundable] wrapped in a read
- * action (never on the EDT, per `CONSTITUTION.md` §6), then restarts
- * the daemon highlighting pass on completion so already-open editors
+ * action (never on the EDT), then restarts the daemon highlighting
+ * pass on completion so already-open editors
  * immediately reflect the freshly counted references without requiring
  * the user to touch each file.
  */

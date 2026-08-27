@@ -8,8 +8,7 @@ import javax.swing.Icon
  * platform's own bundled icons rather than a custom `Icon`
  * implementation -- same precedent as `unused-npm-script-companion`'s
  * `UnusedNpmScriptIcons` (icon members confirmed to exist on the pinned
- * platform version via `javap` against `AllIcons$General`, per
- * `CONSTITUTION.md` §6).
+ * platform version via `javap` against `AllIcons$General`, not guessed).
  */
 object FlagReferenceIcons {
     /** totalReferenceCount >= 2: at least one other call site shares this key. */

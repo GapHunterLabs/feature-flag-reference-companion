@@ -49,7 +49,7 @@ class FlagReferenceIndex(private val project: Project) {
      * Re-scans every `.java`/`.kt` file under project content roots and
      * replaces the cached index. Must be called from a read action (the
      * caller -- [dev.gaphunter.featureflagreferencecompanion.action.RefreshFlagReferencesAction] --
-     * runs this inside `runReadAction` off the EDT, per `CONSTITUTION.md` §6).
+     * runs this inside `runReadAction` off the EDT).
      */
     fun refresh() {
         val calls = mutableListOf<FlagCheckCall>()

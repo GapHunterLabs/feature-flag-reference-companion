@@ -42,7 +42,7 @@
     </extensions>
 
     <!-- Required since the Kotlin plugin's K2 mode became the default: without this,
-         the whole plugin silently fails to load (SDK_GOTCHAS.md SS3). JavaFlagCheckFinder/
+         the whole plugin silently fails to load. JavaFlagCheckFinder/
          KotlinFlagCheckFinder and FlagReferenceLineMarkerProvider only walk structural PSI
          (PsiMethodCallExpression, KtCallExpression, KtStringTemplateExpression); none of
          them call any Kotlin resolve/analysis API, so both K1 and K2 are genuinely supported. -->

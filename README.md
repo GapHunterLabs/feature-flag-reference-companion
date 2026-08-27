@@ -12,7 +12,7 @@ ConfigCat/any provider connection, ever.
 ## Why it exists
 
 An original idea, not a port of an existing competitor — validated
-against `CONSTITUTION.md` §1's "Plan B permanente" discipline before
+against this catalog's own idea-validation discipline before
 being built. The 3 existing feature-flag plugins on JetBrains
 Marketplace are all clients that **connect to a provider's service**
 to check a flag's live state — this plugin is deliberately the
@@ -68,10 +68,9 @@ Counting every reference to a flag key across the **whole open
 project** is real work — scanning every `.java`/`.kt` file under the
 project's content roots. Running that inside the daemon's per-edit
 highlighting pass would silently reintroduce exactly the kind of
-editor lag this catalog already avoids everywhere else
-(`CONSTITUTION.md` §6, "cómputo pesado siempre fuera del EDT" — this
-goes one step further and keeps the whole scan off the *hot path
-entirely*, not just off the EDT).
+editor lag this catalog already avoids everywhere else (heavy
+computation always off the EDT — this goes one step further and keeps
+the whole scan off the *hot path entirely*, not just off the EDT).
 
 - The reference count is computed **only** when you explicitly run
   **Refresh Feature Flag References** (Find Action, or Tools menu).
@@ -128,8 +127,8 @@ each line is not.
   `variation`, ...) generalizes better across SDKs than a hardcoded
   list of resolved framework types would.
 - **`LineMarkerInfo` anchored on a real leaf PSI element from the
-  start**, per `SDK_GOTCHAS.md` §20 — never the composite literal node
-  itself. Applied proactively in both the Java and Kotlin code paths,
+  start** — never the composite literal node itself. Applied
+  proactively in both the Java and Kotlin code paths,
   not discovered live: a `PsiLiteralExpression`/`KtStringTemplateExpression`
   passed directly to `LineMarkerInfo` triggers a "Performance warning"
   that fails tests and spams the log in a real IDE session.
