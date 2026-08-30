@@ -20,9 +20,9 @@ dependencies {
         // Kotlin PSI (KtCallExpression/KtStringTemplateExpression) needed to
         // detect flag-check calls in .kt files, same "matching by simple
         // method name, not resolved symbol" principle already proven by
-        // HttpSignalNames/SqlSignalNames in other plugins of this batch. See
-        // SDK_GOTCHAS.md SS3: supportsKotlinPluginMode is required or the
-        // plugin silently fails to load.
+        // HttpSignalNames/SqlSignalNames in other plugins of this batch.
+        // supportsKotlinPluginMode is required or the plugin silently
+        // fails to load.
         bundledPlugin("org.jetbrains.kotlin")
 
         testFramework(TestFrameworkType.Platform)
@@ -47,7 +47,7 @@ intellijPlatform {
 
     // Catch experimental/internal API usage locally, before Marketplace's
     // own verifier flags it post-upload. Never relax this list without a
-    // documented exception (see AUTOMATION_PLAYBOOK.md SS1.5).
+    // documented exception.
     pluginVerification {
         failureLevel = listOf(
             VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
