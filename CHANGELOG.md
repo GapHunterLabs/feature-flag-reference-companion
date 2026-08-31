@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## [0.2.0]
+
+### Added
+
+- Recognizes Flagsmith's `hasFeatureFlag`/`getFeatureFlag` method
+  names -- specific enough to include safely (the name itself names
+  the concept, unlike `getValue`, which stays excluded).
+
 ## [0.1.1]
 
 ### Added
@@ -39,6 +47,7 @@
 - 100% static PSI analysis -- no network call, no provider connection,
   no telemetry.
 
-[Unreleased]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.1.1...HEAD
+[Unreleased]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/GapHunterLabs/feature-flag-reference-companion/commits/0.1.0
