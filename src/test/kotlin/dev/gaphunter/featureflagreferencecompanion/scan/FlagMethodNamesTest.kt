@@ -16,6 +16,8 @@ class FlagMethodNamesTest : TestCase() {
         assertTrue(FlagMethodNames.matches("boolVariation"))
         assertTrue(FlagMethodNames.matches("isOn"))
         assertTrue(FlagMethodNames.matches("evaluateFlag"))
+        assertTrue(FlagMethodNames.matches("hasFeatureFlag"))
+        assertTrue(FlagMethodNames.matches("getFeatureFlag"))
     }
 
     @Test

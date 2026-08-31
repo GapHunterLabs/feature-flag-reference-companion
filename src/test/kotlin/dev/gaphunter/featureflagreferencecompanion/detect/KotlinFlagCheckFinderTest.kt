@@ -36,6 +36,23 @@ class KotlinFlagCheckFinderTest : BasePlatformTestCase() {
         assertEquals("checkout_v2", hits[0].key)
     }
 
+    fun `test finds flagsmith-style hasFeatureFlag and getFeatureFlag calls`() {
+        val file = myFixture.configureByText(
+            "F.kt",
+            """
+            class F {
+                fun m() {
+                    val on = flagsmith.hasFeatureFlag("checkout_v2")
+                    val flag = flagsmith.getFeatureFlag("checkout_v2")
+                }
+            }
+            """.trimIndent(),
+        )
+        val hits = KotlinFlagCheckFinder.findAll(file)
+        assertEquals(setOf("checkout_v2"), hits.map { it.key }.toSet())
+        assertEquals(2, hits.size)
+    }
+
     fun `test ignores unrelated calls`() {
         val file = myFixture.configureByText(
             "F.kt",

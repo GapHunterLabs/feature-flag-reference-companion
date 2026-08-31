@@ -34,6 +34,7 @@ classpath:
 - `isEnabled`, `isFeatureEnabled`, `isFlagEnabled` — Unleash and common
   generic/home-grown wrapper conventions.
 - `variation`, `boolVariation` — LaunchDarkly.
+- `hasFeatureFlag`, `getFeatureFlag` — Flagsmith.
 - `getFlag`, `getBooleanFlag`, `evaluateFlag`, `isOn` — other common
   generic/home-grown conventions.
 

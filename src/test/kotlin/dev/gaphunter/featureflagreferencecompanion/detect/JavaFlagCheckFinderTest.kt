@@ -43,6 +43,23 @@ class JavaFlagCheckFinderTest : BasePlatformTestCase() {
         assertEquals(setOf("a", "b", "c", "d", "e", "f", "g", "h", "i"), hits.map { it.key }.toSet())
     }
 
+    fun `test finds flagsmith-style hasFeatureFlag and getFeatureFlag calls`() {
+        val file = myFixture.configureByText(
+            "F.java",
+            """
+            class F {
+                void m() {
+                    boolean on = flagsmith.hasFeatureFlag("checkout_v2");
+                    Flag flag = flagsmith.getFeatureFlag("checkout_v2");
+                }
+            }
+            """.trimIndent(),
+        )
+        val hits = JavaFlagCheckFinder.findAll(file)
+        assertEquals(setOf("checkout_v2"), hits.map { it.key }.toSet())
+        assertEquals(2, hits.size)
+    }
+
     fun `test ignores unrelated method calls`() {
         val file = myFixture.configureByText(
             "F.java",

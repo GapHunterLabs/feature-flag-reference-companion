@@ -13,11 +13,14 @@ package dev.gaphunter.featureflagreferencecompanion.scan
  * covers the common method names across LaunchDarkly
  * (`boolVariation`, `variation`), Unleash (`isEnabled`), ConfigCat
  * (`getValue` is deliberately NOT included -- too generic a name,
- * see below), and generic/home-grown conventions
- * (`FeatureFlags.isOn(...)`, `isFeatureEnabled`, `isFlagEnabled`,
- * `getFlag`, `evaluateFlag`, `getBooleanFlag`). A project using a
- * differently-named wrapper around one of these SDKs won't be
- * detected -- that's a real, documented limitation, not a bug.
+ * see below), Flagsmith (`hasFeatureFlag`, `getFeatureFlag` --
+ * specific enough to include, unlike `getValue`: the name itself
+ * names the concept, not a generic accessor), and generic/home-grown
+ * conventions (`FeatureFlags.isOn(...)`, `isFeatureEnabled`,
+ * `isFlagEnabled`, `getFlag`, `evaluateFlag`, `getBooleanFlag`). A
+ * project using a differently-named wrapper around one of these SDKs
+ * won't be detected -- that's a real, documented limitation, not a
+ * bug.
  *
  * **Deliberately excluded:** `getValue`, `get`, `check`, `test`,
  * `is` alone -- names generic enough that matching them by simple
@@ -36,6 +39,8 @@ object FlagMethodNames {
         "boolvariation",
         "ison",
         "evaluateflag",
+        "hasfeatureflag",
+        "getfeatureflag",
     )
 
     /** Case-insensitive match against a call's simple method name (no receiver/qualifier). */
