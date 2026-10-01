@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [0.2.2]
+
+### Fixed
+
+- **Refresh Feature Flag References** scanned the whole project inside
+  a single read lock: on a large project the editor froze (typing
+  waited for the full scan) and the task could not be cancelled. It now
+  reads one file at a time, shows progress and can be cancelled.
+
 ## [0.2.1]
 
 ### Fixed
@@ -54,7 +63,8 @@
 - 100% static PSI analysis -- no network call, no provider connection,
   no telemetry.
 
-[Unreleased]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.2.1...HEAD
+[Unreleased]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.2.2...HEAD
+[0.2.2]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.1.1...0.2.0
 [0.1.1]: https://github.com/GapHunterLabs/feature-flag-reference-companion/compare/0.1.0...0.1.1

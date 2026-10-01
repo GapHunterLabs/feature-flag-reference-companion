@@ -1,6 +1,9 @@
 package dev.gaphunter.featureflagreferencecompanion.index
 
+import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.components.Service
+import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ProjectFileIndex
 import com.intellij.openapi.vfs.VirtualFile
@@ -51,33 +54,50 @@ class FlagReferenceIndex(private val project: Project) {
      * caller -- [dev.gaphunter.featureflagreferencecompanion.action.RefreshFlagReferencesAction] --
      * runs this inside `runReadAction` off the EDT).
      */
-    fun refresh() {
-        val calls = mutableListOf<FlagCheckCall>()
-        val psiManager = PsiManager.getInstance(project)
-        val fileIndex = ProjectFileIndex.getInstance(project)
-
-        fileIndex.iterateContent { virtualFile: VirtualFile ->
-            if (!virtualFile.isDirectory) {
-                val psiFile = psiManager.findFile(virtualFile)
-                when (virtualFile.extension) {
-                    "java" -> psiFile?.let { calls += JavaFlagCheckFinder.findAll(it) }
-                    "kt" -> psiFile?.let { calls += KotlinFlagCheckFinder.findAll(it) }
-                }
+    /**
+     * Rescans every Java/Kotlin file of the project. One short read action per file, with cancellation between
+     * files: before 0.2.2 the whole scan ran inside ONE read action, so on a large project every write action --
+     * typing included -- waited for the full scan to finish (a freeze), and the task couldn't be cancelled
+     * (found 2026-10-01). [indicator] reports progress and cancels; null uses the current one, if any.
+     */
+    fun refresh(indicator: ProgressIndicator? = null) {
+        val files = ReadAction.compute<List<VirtualFile>, RuntimeException> {
+            val found = mutableListOf<VirtualFile>()
+            ProjectFileIndex.getInstance(project).iterateContent { virtualFile: VirtualFile ->
+                if (!virtualFile.isDirectory && virtualFile.extension in SCANNED_EXTENSIONS) found += virtualFile
+                true
             }
-            true
+            found
         }
-
+        indicator?.isIndeterminate = false
+        val calls = mutableListOf<FlagCheckCall>()
+        for ((i, virtualFile) in files.withIndex()) {
+            if (indicator != null) indicator.checkCanceled() else ProgressManager.checkCanceled()
+            indicator?.fraction = i.toDouble() / files.size
+            calls += ReadAction.compute<List<FlagCheckCall>, RuntimeException> { callsIn(virtualFile) }
+        }
         callsByKey = calls.groupBy { it.key }
         hasRunAtLeastOnce = true
     }
 
-    /** Result for the key found at [call], or null if [refresh] has never run or found no call at that exact site. */
+    private fun callsIn(virtualFile: VirtualFile): List<FlagCheckCall> {
+        if (!virtualFile.isValid || project.isDisposed) return emptyList()
+        val psiFile = PsiManager.getInstance(project).findFile(virtualFile) ?: return emptyList()
+        return when (virtualFile.extension) {
+            "java" -> JavaFlagCheckFinder.findAll(psiFile)
+            "kt" -> KotlinFlagCheckFinder.findAll(psiFile)
+            else -> emptyList()
+        }
+    }
+
     fun resultFor(call: FlagCheckCall): FlagReferenceResult? {
         val callsForKey = callsByKey[call.key] ?: return null
         return FlagReferenceResult(key = call.key, totalReferenceCount = callsForKey.size)
     }
 
     companion object {
+        private val SCANNED_EXTENSIONS = setOf("java", "kt")
+
         fun getInstance(project: Project): FlagReferenceIndex = project.getService(FlagReferenceIndex::class.java)
     }
 }

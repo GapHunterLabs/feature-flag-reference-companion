@@ -82,4 +82,16 @@ class FlagReferenceIndexTest : BasePlatformTestCase() {
         val result = index.resultFor(call)
         assertEquals(1, result?.totalReferenceCount)
     }
+
+    // Regression (2026-10-01): the refresh ran as one uncancellable read action over the whole project.
+    fun `test a cancelled refresh stops instead of scanning the whole project`() {
+        myFixture.addFileToProject("src/Checkout.java", "class Checkout { void go(Flags f) { f.isEnabled(\"checkout_v2\"); } }")
+        val index = FlagReferenceIndex.getInstance(project)
+        val cancelled = com.intellij.openapi.progress.EmptyProgressIndicator().apply { cancel() }
+        try {
+            index.refresh(cancelled)
+            fail("a cancelled indicator must stop the refresh")
+        } catch (_: com.intellij.openapi.progress.ProcessCanceledException) {
+        }
+    }
 }

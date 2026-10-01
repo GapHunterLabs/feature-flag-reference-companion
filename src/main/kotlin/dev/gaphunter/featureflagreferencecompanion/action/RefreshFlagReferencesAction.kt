@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
@@ -33,9 +32,10 @@ class RefreshFlagReferencesAction : AnAction() {
         val project = event.project ?: return
         val index = FlagReferenceIndex.getInstance(project)
 
-        ProgressManager.getInstance().run(object : Task.Backgroundable(project, "Refreshing Feature Flag References", false) {
+        ProgressManager.getInstance().run(object : Task.Backgroundable(project, "Refreshing Feature Flag References", true) {
             override fun run(indicator: ProgressIndicator) {
-                ReadAction.run<Throwable> { index.refresh() }
+                // cancellable, one short read action per file (see FlagReferenceIndex.refresh)
+                index.refresh(indicator)
             }
 
             override fun onSuccess() {

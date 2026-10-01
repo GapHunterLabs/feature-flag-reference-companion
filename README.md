@@ -74,7 +74,12 @@ computation always off the EDT — this goes one step further and keeps
 the whole scan off the *hot path entirely*, not just off the EDT).
 
 - The reference count is computed **only** when you explicitly run
-  **Refresh Feature Flag References** (Find Action, or Tools menu).
+  **Refresh Feature Flag References** (Find Action, or Tools menu). The
+  scan runs in the background with a progress bar, one short read per
+  file, and can be cancelled; editing keeps working while it runs.
+  (Before 0.2.2 the whole scan was a single read lock: on a large
+  project, typing froze until it finished, and it couldn't be
+  cancelled.)
 - Until the first refresh, every recognized call site shows a neutral
   "not yet scanned" icon — never a guessed verdict.
 - After editing code that adds or removes a flag reference, the gutter
