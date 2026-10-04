@@ -9,6 +9,12 @@ behind after a rollout completed) without connecting to any provider.
 100% static PSI analysis: no network call, no LaunchDarkly/Unleash/
 ConfigCat/any provider connection, ever.
 
+![Feature Flag Reference Companion: find the feature flags nobody checks anymore](docs/media/hero.gif)
+
+Each feature on its own:
+[Count references](docs/media/01-count-references.gif) ·
+[Orphan candidates](docs/media/02-orphan-candidates.gif)
+
 ## Why it exists
 
 An original idea, not a port of an existing competitor — validated
