@@ -17,18 +17,7 @@ Each feature on its own:
 
 ## Why it exists
 
-An original idea, not a port of an existing competitor — validated
-against this catalog's own idea-validation discipline before
-being built. The 3 existing feature-flag plugins on JetBrains
-Marketplace are all clients that **connect to a provider's service**
-to check a flag's live state — this plugin is deliberately the
-opposite: 100% static analysis of references already in your code, no
-provider connection, complementary rather than competing. Same
-"apuesta consciente sin ancla de mercado" treatment as Refactor
-Simulator / Test Scaffold Companion / Circular Dependency Companion /
-Unused npm Script Companion: v0.1 ships free, no time/marketing
-investment disproportionate to real demand signal until there's
-evidence of adoption.
+An original idea, not a port of an existing competitor. The 3 existing feature-flag plugins on JetBrains Marketplace are all clients that **connect to a provider's service** to check a flag's live state. This plugin is deliberately the opposite: 100% static analysis of the references already in your code, with no provider connection, so it complements those plugins instead of competing with them. It is free.
 
 ## Recognized SDK method names (v0.1 scope, stated honestly)
 
